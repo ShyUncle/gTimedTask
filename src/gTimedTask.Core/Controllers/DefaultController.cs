@@ -17,8 +17,9 @@ namespace gTimedTask.Core.Controllers
     {
         public async Task<string> Index()
         {
+            await JobDynamicScheduler.AddJob("myfirstJob1", "Test.Job1", "0/30 * * * * ?");
             string aaa = AppContext.BaseDirectory;
-            string path =AppDomain.CurrentDomain.BaseDirectory+ "wwwroot/gTimedTask.db";
+            string path = AppDomain.CurrentDomain.BaseDirectory + "Db/gTimedTask.db";
             using (IDbConnection con = new SqliteConnection($"Data Source={path}"))
             {
                 var a = await con.GetAsync<Test>(1);

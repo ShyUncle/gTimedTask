@@ -37,7 +37,8 @@ namespace gTimedTask.Core
             {
                 app.UseDeveloperExceptionPage();
             }
-      
+
+            JobDynamicScheduler.Start();
             app.UseHttpsRedirection();
 
             app.UseRouting();
