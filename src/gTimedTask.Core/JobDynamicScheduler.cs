@@ -1,10 +1,13 @@
-﻿using Quartz;
+﻿using Grpc.Net.Client;
+using Quartz;
 using Quartz.Impl;
 using Quartz.Impl.Triggers;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace gTimedTask.Core
@@ -15,7 +18,7 @@ namespace gTimedTask.Core
         public static async void Start()
         {
             //开启socket服务端
-        //    JobServer.Start();
+            //    JobServer.Start();
             //开启定时任务
             NameValueCollection properties = new NameValueCollection();
             properties["quartz.scheduler.instanceName"] = "GCScheduler";
@@ -25,7 +28,7 @@ namespace gTimedTask.Core
             properties["quartz.threadPool.threadPriority"] = "Normal";
             properties["quartz.jobStore.misfireThreshold"] = "60000";
             properties["quartz.jobStore.useProperties"] = "false";
-            properties["quartz.jobStore.clustered"] = "true";// "true";是否集群
+            properties["quartz.jobStore.clustered"] = "false";// "true";是否集群
             properties["quartz.serializer.type"] = "binary";
             //存储类型
             properties["quartz.jobStore.type"] = "Quartz.Impl.AdoJobStore.JobStoreTX, Quartz";
@@ -37,13 +40,15 @@ namespace gTimedTask.Core
             properties["quartz.jobStore.dataSource"] = "myDS";
             //连接字符串
             string path = AppDomain.CurrentDomain.BaseDirectory + "Db/gTimedTask.db";
-                properties["quartz.dataSource.myDS.connectionString"] = $"Data Source={path}";
+            properties["quartz.dataSource.myDS.connectionString"] = $"Data Source={path}";
             //mysqlserver版本
             properties["quartz.dataSource.myDS.provider"] = "SQLite-Microsoft";
             ISchedulerFactory sf = new StdSchedulerFactory(properties);
             scheduler = await sf.GetScheduler();
             await scheduler.Start();
-          //  JobMonitorHelper.Start();
+
+            scheduler.ListenerManager.AddTriggerListener(new TriggerListener());
+            //  JobMonitorHelper.Start();
         }
 
         ///// <summary>
@@ -89,7 +94,7 @@ namespace gTimedTask.Core
             // TriggerKey : name + group
             TriggerKey triggerKey = new TriggerKey(jobName, jobGroup);
             JobKey jobKey = new JobKey(jobName, jobGroup);
-           
+
             // TriggerKey valid if_exists
             if (await CheckExists(jobName, jobGroup))
             {
@@ -102,8 +107,7 @@ namespace gTimedTask.Core
             var cronTrigger = TriggerBuilder.Create().WithIdentity(triggerKey).WithSchedule(cronScheduleBuilder).Build();
 
             // JobDetail 
-
-            IJobDetail jobDetail = JobBuilder.Create(typeof(RemoteHttpJob)).WithIdentity(jobKey).WithDescription("测试").UsingJobData("dd","1").Build();
+            IJobDetail jobDetail = JobBuilder.Create(typeof(RemoteHttpJob)).WithIdentity(jobKey).WithDescription("测试").UsingJobData("dd", "1").Build();
             // schedule : jobDetail + cronTrigger
             await scheduler.ScheduleJob(jobDetail, cronTrigger);
             return true;
@@ -265,22 +269,78 @@ namespace gTimedTask.Core
             return result;
         }
 
+        public static async Task<object> GetList()
+        {
+            // var list= await scheduler.GetTriggerState();
+            return null;
+        }
 
 
     }
+
+    public class TriggerListener : ITriggerListener
+    {
+        public string Name => "global";
+
+        public Task TriggerComplete(ITrigger trigger, IJobExecutionContext context, SchedulerInstruction triggerInstructionCode, CancellationToken cancellationToken = default)
+        {
+            Console.WriteLine("执行完成");
+
+            return Task.CompletedTask;
+            // throw new NotImplementedException();
+        }
+
+        public Task TriggerFired(ITrigger trigger, IJobExecutionContext context, CancellationToken cancellationToken = default)
+        {
+            Console.WriteLine("执行中");
+            return Task.CompletedTask;
+            // throw new NotImplementedException();
+        }
+
+        public Task TriggerMisfired(ITrigger trigger, CancellationToken cancellationToken = default)
+        {
+            if (cancellationToken.IsCancellationRequested)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+            }
+            Console.WriteLine("错过执行");
+            return Task.CompletedTask;
+            //throw new NotImplementedException();
+        }
+
+        public Task<bool> VetoJobExecution(ITrigger trigger, IJobExecutionContext context, CancellationToken cancellationToken = default)
+        {
+            Console.WriteLine("执行是否不执行");
+            return Task.FromResult(false);
+            //  throw new NotImplementedException();
+        }
+    }
+    [Quartz.DisallowConcurrentExecution]
     public class RemoteHttpJob : IJob
     {
-        public Task Execute(IJobExecutionContext context)
+        private IHttpClientFactory _httpClientFactory;
+        //public RemoteHttpJob(System.Net.Http.IHttpClientFactory clientFactory)
+        //{
+        //    this._httpClientFactory = clientFactory;
+        //}
+        public async Task Execute(IJobExecutionContext context)
         {
-            return Task.Factory.StartNew(() =>
+
+            //  return Task.Factory.StartNew(() =>
             {
                 var s = context.JobDetail;
-                JobKey jobKey = context.Trigger.JobKey;
-                int jobId = Convert.ToInt32(jobKey.Name);
+                //   var url = s.JobDataMap.Get("url").ToString();
+                var address = ExecutorManager.Get(s.Key.Name);
+                var channel = GrpcChannel.ForAddress(address);
 
+                var greeterClient = new Greeter.GreeterClient(channel);
+                await greeterClient.GetHelloAsync(new HelloRequest { Name = s.Key.Name });
+                context.Result = "a";
+                JobKey jobKey = context.Trigger.JobKey;
+                Console.WriteLine(DateTime.Now);
                 // trigger
-              //  JobTrriger.Trigger(jobId);
-            });
+                //  JobTrriger.Trigger(jobId);
+            }
         }
     }
 }

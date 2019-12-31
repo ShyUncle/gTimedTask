@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Protos\greet.proto" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="Db\gTimedTask.db">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -13,7 +17,8 @@
   <ItemGroup>
     <PackageReference Include="Dapper" Version="2.0.30" />
     <PackageReference Include="Dapper.Contrib" Version="2.0.30" />
-    <PackageReference Include="Grpc.AspNetCore" Version="2.26.0" />
+    <PackageReference Include="Grpc.AspNetCore" Version="2.23.2" />
+    <PackageReference Include="Grpc.Net.Client" Version="2.26.0" />
     <PackageReference Include="Microsoft.Data.SQLite" Version="3.1.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.0" />
@@ -21,7 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Protobuf Include="Protos\greet.proto" GrpcServices="Server" />
+    <Protobuf Include="Protos\greet.proto" GrpcServices="Client" />
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>

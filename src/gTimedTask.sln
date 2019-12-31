@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "gTimedTask.Core", "gTimedTask.Core\gTimedTask.Core.csproj", "{3C4E8F90-15FE-45BC-BDD6-FBCAD7724B91}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "gTimedTask.ClientSample", "gTimedTask.ClientSample\gTimedTask.ClientSample.csproj", "{C519FCA7-E382-445F-B2A4-9C0135935BDF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "gTimedTask.SampleExecutor", "gTimedTask.SampleExecutor\gTimedTask.SampleExecutor.csproj", "{5E2DBA45-4B9B-43F1-A502-B3D72FEB0980}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{3C4E8F90-15FE-45BC-BDD6-FBCAD7724B91}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3C4E8F90-15FE-45BC-BDD6-FBCAD7724B91}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3C4E8F90-15FE-45BC-BDD6-FBCAD7724B91}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C519FCA7-E382-445F-B2A4-9C0135935BDF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C519FCA7-E382-445F-B2A4-9C0135935BDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C519FCA7-E382-445F-B2A4-9C0135935BDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C519FCA7-E382-445F-B2A4-9C0135935BDF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E2DBA45-4B9B-43F1-A502-B3D72FEB0980}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E2DBA45-4B9B-43F1-A502-B3D72FEB0980}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E2DBA45-4B9B-43F1-A502-B3D72FEB0980}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E2DBA45-4B9B-43F1-A502-B3D72FEB0980}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
