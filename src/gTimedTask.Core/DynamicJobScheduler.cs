@@ -12,7 +12,10 @@ using System.Threading.Tasks;
 
 namespace gTimedTask.Core
 {
-    public class JobDynamicScheduler
+    /// <summary>
+    /// 定时任务中心
+    /// </summary>
+    public class DynamicJobScheduler
     {
         static IScheduler scheduler = null;
         public static async void Start()

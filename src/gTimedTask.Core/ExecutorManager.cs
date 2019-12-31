@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 
 namespace gTimedTask.Core
 {
+    /// <summary>
+    /// 执行器管理
+    /// </summary>
     public class ExecutorManager
     {
         public static Dictionary<string, Dictionary<string, string>> executor = new Dictionary<string, Dictionary<string, string>>();
@@ -13,7 +16,6 @@ namespace gTimedTask.Core
             if (!executor.ContainsKey(handlerName))
             {
                 executor.Add(handlerName, new Dictionary<string, string>());
-
             }
             if (!executor[handlerName].ContainsKey(executorName))
             {
