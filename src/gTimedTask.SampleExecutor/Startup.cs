@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace gTimedTask.SampleExecutor
+namespace gTimedTask.Executor
 {
     public class Startup
     {
@@ -21,17 +21,17 @@ namespace gTimedTask.SampleExecutor
             {
                 c.BaseAddress = new Uri("https://localhost:5003");
             });
-            services.AddSingleton<ExecutorManager>();
+            services.AddExecutor();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ExecutorManager executorManager)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
-            executorManager.ServiceRegister();
+            app.UseExecutor();
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>

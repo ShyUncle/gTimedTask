@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace gTimedTask.Core.RegistrationCenter
@@ -11,11 +12,37 @@ namespace gTimedTask.Core.RegistrationCenter
     /// </summary>
     public class JobExecutorManager
     {
-        private ConcurrentDictionary<string, JobExecutor> _list = new ConcurrentDictionary<string, JobExecutor>();
+        private static ConcurrentDictionary<string, JobExecutor> _list = new ConcurrentDictionary<string, JobExecutor>();
+        static JobExecutorManager()
+        {
+            HealthCheck();
+        }
+
+
+        public static void HealthCheck()
+        {
+            Task.Factory.StartNew(async () =>
+            {
+                while (true)
+                {
+                    var list = _list.Values.ToList();
+                    foreach (var item in list)
+                    {
+                        var status = await new TransportManager().HealthCheck(item.Address);
+                        if (status == ExecutorStatus.NotServing)
+                        {
+                            JobExecutor tmp = null;
+                            _list.TryRemove(item.AppId, out tmp);
+                        }
+                    }
+                    await Task.Delay(1000);
+                }
+            });
+        }
         /// <summary>
         /// 注册
         /// </summary>
-        public void Register(JobExecutor jobExecutor)
+        public static void Register(JobExecutor jobExecutor)
         {
             _list.AddOrUpdate(jobExecutor.AppId, jobExecutor, (key, oldJobExecutor) => { return jobExecutor; });
 
@@ -24,7 +51,7 @@ namespace gTimedTask.Core.RegistrationCenter
         /// <summary>
         /// 取消注册
         /// </summary>
-        public void UnRegister(string appId)
+        public static void UnRegister(string appId)
         {
             JobExecutor temp = null;
             var success = _list.TryRemove(appId, out temp);
@@ -32,14 +59,13 @@ namespace gTimedTask.Core.RegistrationCenter
             {
                 _list.TryRemove(appId, out temp);
             }
-            
         }
 
         /// <summary>
         /// 获取所有执行器
         /// </summary>
         /// <returns></returns>
-        public List<JobExecutor> GetAll()
+        public static List<JobExecutor> GetAll()
         {
             return _list.Values.ToList();
         }
@@ -50,7 +76,7 @@ namespace gTimedTask.Core.RegistrationCenter
         /// <param name="jobHandlerName"></param>
         /// <param name="loadBalanceStrategy"></param>
         /// <returns></returns>
-        public JobExecutor GetExecutor(string jobHandlerName, LoadBalanceStrategy loadBalanceStrategy)
+        public static JobExecutor GetExecutor(string jobHandlerName, LoadBalanceStrategy loadBalanceStrategy)
         {
             var list = _list.Values.Where(x => x.JobHandler.Contains(jobHandlerName)).ToList();
             if (list.Count > 1)//一个不需要走策略
@@ -58,6 +84,13 @@ namespace gTimedTask.Core.RegistrationCenter
             }
             return list.FirstOrDefault();
         }
+    }
+
+    public enum ExecutorStatus
+    {
+        Unknown = 0,
+        Serving = 1,
+        NotServing = 2
     }
 
     public enum LoadBalanceStrategy
@@ -94,7 +127,6 @@ namespace gTimedTask.Core.RegistrationCenter
         public string Name { get; set; }
         public string AppId { get; set; }
         public string Address { get; set; }
-        public int Port { get; set; }
         public List<string> JobHandler { get; set; } = new List<string>();
     }
 

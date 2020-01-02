@@ -9,6 +9,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using gTimedTask.Core;
+using gTimedTask.Core.RegistrationCenter;
+
 namespace gTimedTask.Core
 {
     public class Startup

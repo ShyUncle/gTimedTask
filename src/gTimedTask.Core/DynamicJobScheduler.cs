@@ -1,4 +1,5 @@
 ﻿using Grpc.Net.Client;
+using gTimedTask.Core.RegistrationCenter;
 using Quartz;
 using Quartz.Impl;
 using Quartz.Impl.Triggers;
@@ -328,22 +329,24 @@ namespace gTimedTask.Core
         //}
         public async Task Execute(IJobExecutionContext context)
         {
+            var s = context.JobDetail;
 
-            //  return Task.Factory.StartNew(() =>
+            //   var url = s.JobDataMap.Get("url").ToString();
+            var executor = JobExecutorManager.GetExecutor(s.Key.Name, LoadBalanceStrategy.First);
+            if (executor == null)
             {
-                var s = context.JobDetail;
-                //   var url = s.JobDataMap.Get("url").ToString();
-                var address = ExecutorManager.Get(s.Key.Name);
-                var channel = GrpcChannel.ForAddress(address);
-
-                var greeterClient = new Greeter.GreeterClient(channel);
-                await greeterClient.GetHelloAsync(new HelloRequest { Name = s.Key.Name });
-                context.Result = "a";
-                JobKey jobKey = context.Trigger.JobKey;
-                Console.WriteLine(DateTime.Now);
-                // trigger
-                //  JobTrriger.Trigger(jobId);
+                return;
             }
+            var address = executor.Address;
+            var channel = GrpcChannel.ForAddress(address);
+
+            var greeterClient = new Greeter.GreeterClient(channel);
+            await greeterClient.GetHelloAsync(new HelloRequest { Name = s.Key.Name });
+            context.Result = "a";
+            JobKey jobKey = context.Trigger.JobKey;
+            Console.WriteLine(DateTime.Now);
+            // trigger
+            //  JobTrriger.Trigger(jobId);
         }
     }
 }
