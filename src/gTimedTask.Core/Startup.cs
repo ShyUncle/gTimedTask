@@ -15,6 +15,7 @@ using System.Text;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.AspNetCore.Routing.Template;
 using Microsoft.AspNetCore.Routing;
+using System.Text.RegularExpressions;
 
 namespace gTimedTask.Core
 {
@@ -45,7 +46,7 @@ namespace gTimedTask.Core
             DynamicJobScheduler.Start();
             var staticFileOptions = new StaticFileOptions
             {
-                RequestPath = $"/h2tml",
+                RequestPath = $"/h1tml",
                 FileProvider = new EmbeddedFileProvider(System.Reflection.Assembly.Load("gTimedTask"), "gTimedTask.html"),
             };
             app.UseStaticFiles(staticFileOptions);
@@ -89,6 +90,17 @@ namespace gTimedTask.Core
                }
                if (context.Request.Path.ToString().Contains("h1tml"))
                {
+                   if (Regex.IsMatch(context.Request.Path.Value, $"^/h1tml/?$"))
+                   {
+                       // Use relative redirect to support proxy environments
+                       var relativeRedirectPath = context.Request.Path.Value.EndsWith("/")
+                           ? "index.html"
+                           : $"{ context.Request.Path.Value.Split('/').Last()}/index.html";
+                       context.Response.StatusCode = 301;
+                       context.Response.Headers["Location"] = relativeRedirectPath;
+
+                       return;
+                   }
                    await RespondWithIndexHtml(context.Response);
                    return;
                }
@@ -105,7 +117,7 @@ namespace gTimedTask.Core
             response.StatusCode = 200;
             response.ContentType = "text/html;charset=utf-8";
             var s = System.Reflection.Assembly.Load("gTimedTask")   // typeof(gTimedTask).GetTypeInfo().Assembly
-            .GetManifestResourceStream("gTimedTask.html.index.html");
+            .GetManifestResourceStream("gTimedTask.html.index1.html");
             using (var stream = s)
             {
                 // Inject arguments before writing to response
@@ -114,7 +126,6 @@ namespace gTimedTask.Core
                 //{
                 //    htmlBuilder.Replace(entry.Key, entry.Value);
                 //}
-
                 await response.WriteAsync(htmlBuilder.ToString(), Encoding.UTF8);
             }
         }

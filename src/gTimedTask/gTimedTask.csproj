@@ -11,6 +11,9 @@
     <!--<EmbeddedResource Include="html\index.html" />-->
   </ItemGroup>
   <ItemGroup>
+    <None Remove="html\style1.css" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Grpc.AspNetCore" Version="2.26.0" />
     <PackageReference Include="Grpc.Net.Client" Version="2.26.0" />
     <PackageReference Include="Quartz" Version="3.0.7" />
