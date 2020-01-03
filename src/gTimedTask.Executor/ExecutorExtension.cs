@@ -17,7 +17,7 @@ namespace gTimedTask.Executor
         public static IApplicationBuilder UseExecutor(this IApplicationBuilder app)
         {
             var executorManager = app.ApplicationServices.GetService<ExecutorManager>();
-            executorManager.ServiceRegister(null);
+            executorManager.ExecutorRegister(null);
             return app;
         }
 
@@ -26,7 +26,7 @@ namespace gTimedTask.Executor
             var executorManager = app.ApplicationServices.GetService<ExecutorManager>();
             var jobOption = new JobExecutorOption();
             optionConfig.Invoke(jobOption);
-            executorManager.ServiceRegister(jobOption);
+            executorManager.ExecutorRegister(jobOption);
             return app;
         }
     }

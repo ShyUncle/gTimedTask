@@ -4,6 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Net.Http;
 using Microsoft.Extensions.Configuration;
+using System.Reflection;
+using Microsoft.Extensions.Hosting;
+using System.Text.Json;
 namespace gTimedTask.Executor
 {
     public class JobExecutor
@@ -12,6 +15,7 @@ namespace gTimedTask.Executor
         public string AppId { get; set; }
         public string Address { get; set; }
         public List<string> JobHandler { get; set; } = new List<string>();
+        public string RegisterUrl { get; set; }
     }
 
     public class JobExecutorOption
@@ -24,14 +28,18 @@ namespace gTimedTask.Executor
 
     public class ExecutorManager
     {
-        public ExecutorManager(IConfiguration configuration)
+        public ExecutorManager(IConfiguration configuration, IHostApplicationLifetime hostApplicationLifetime)
         {
             Configuration = configuration;
+            hostApplicationLifetime.ApplicationStopping.Register(() =>
+            {
+                ExecutorUnRegister();
+            });
         }
-        public IConfiguration Configuration { get; }
-
+        private IConfiguration Configuration { get; }
+        private JobExecutor jobExecutor;
         public Dictionary<string, Type> jobHandlerRepository = new Dictionary<string, Type>();
-        public void ServiceRegister(JobExecutorOption option)
+        public void ExecutorRegister(JobExecutorOption option)
         {
             var types = AppDomain.CurrentDomain.GetAssemblies().SelectMany(a => a.GetTypes().Where(t => t.GetInterfaces().Contains(typeof(IJobHandler)))).ToList();
             foreach (var type in types)
@@ -43,19 +51,26 @@ namespace gTimedTask.Executor
                 option = Configuration.GetSection("JobExecutor").Get<JobExecutorOption>();
             }
             //todo:参数检查
-            var executor = new JobExecutor()
+            jobExecutor = new JobExecutor()
             {
                 Address = option.Address,
                 AppId = option.AppId,
                 Name = option.Name,
-                JobHandler = jobHandlerRepository.Keys.ToList()
+                JobHandler = jobHandlerRepository.Keys.ToList(),
+                RegisterUrl = option.RegisterUrl
             };
 
-
-            var content = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(executor), System.Text.Encoding.UTF8, "application/json");
+            var content = new StringContent(JsonSerializer.Serialize(jobExecutor), System.Text.Encoding.UTF8, "application/json");
+            //todo:使用httpclientFactory
             var r = new HttpClient().PostAsync(option.RegisterUrl, content).Result.Content.ReadAsStringAsync().Result;
         }
 
+        public void ExecutorUnRegister()
+        {
+            var content = new StringContent(JsonSerializer.Serialize(new { appId = jobExecutor.AppId }), System.Text.Encoding.UTF8, "application/json");
+            //todo:使用httpclientFactory
+            var r = new HttpClient().PutAsync(jobExecutor.RegisterUrl, content).Result.Content.ReadAsStringAsync().Result;
+        }
         public void Trigger(string handlerName)
         {
             if (jobHandlerRepository.Keys.Contains(handlerName))

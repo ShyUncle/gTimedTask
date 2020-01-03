@@ -15,12 +15,12 @@ namespace gTimedTask.Core.Controllers
     [Route("api/[controller]")]
     [ApiController]
     public class DefaultController : ControllerBase
-    {  
+    {
 
         [HttpGet]
         public async Task<string> Index()
         {
-            await DynamicJobScheduler.AddJob("gTimedTask.SampleExecutor.Handler.LogHandler", "Test.Job1", "0/30 * * * * ?");
+            await DynamicJobScheduler.AddJob(JobExecutorManager.GetAll().First().JobHandler.First(), "Test.Job1", "0/30 * * * * ?");
             //string aaa = AppContext.BaseDirectory;
             //string path = AppDomain.CurrentDomain.BaseDirectory + "Db/gTimedTask.db";
             //using (IDbConnection con = new SqliteConnection($"Data Source={path}"))
@@ -32,9 +32,16 @@ namespace gTimedTask.Core.Controllers
         }
 
         [HttpPost]
-        public async Task<int> ServiceRegister([FromBody]JobExecutor r = default)
+        public async Task<int> ExecutorRegister([FromBody]JobExecutor r = default)
         {
-              JobExecutorManager.Register(r);
+            JobExecutorManager.Register(r);
+            return await Task.FromResult(3);
+        }
+
+        [HttpPut]
+        public async Task<int> ExecutorUnRegister(string appId)
+        {
+            JobExecutorManager.UnRegister(appId);
             return await Task.FromResult(3);
         }
     }

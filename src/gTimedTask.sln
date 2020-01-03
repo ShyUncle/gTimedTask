@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "gTimedTask.SampleExecutor",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "gTimedTask", "gTimedTask\gTimedTask.csproj", "{76B2376C-542E-4C98-846E-AD10CB981E4E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "gTimedTask.Executor", "gTimedTask.Executor\gTimedTask.Executor.csproj", "{60F01011-F186-46A1-808A-7447EA22F297}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "gTimedTask.Executor", "gTimedTask.Executor\gTimedTask.Executor.csproj", "{60F01011-F186-46A1-808A-7447EA22F297}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

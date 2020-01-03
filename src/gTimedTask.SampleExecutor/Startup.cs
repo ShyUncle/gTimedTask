@@ -21,6 +21,7 @@ namespace gTimedTask.Executor
             {
                 c.BaseAddress = new Uri("https://localhost:5003");
             });
+            //todo:添加参数配置
             services.AddExecutor();
         }
 
@@ -31,9 +32,16 @@ namespace gTimedTask.Executor
             {
                 app.UseDeveloperExceptionPage();
             }
+            //todo:去掉参数配置
             app.UseExecutor();
             app.UseRouting();
-
+            app.Use((context, next) =>
+            {
+                var potint = context.GetEndpoint();
+                var dd = context.Request.RouteValues;
+                
+                return next();
+            });
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapGrpcService<GreeterService>();

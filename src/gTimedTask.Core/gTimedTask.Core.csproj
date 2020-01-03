@@ -13,16 +13,12 @@
   <ItemGroup>
     <PackageReference Include="Dapper" Version="2.0.30" />
     <PackageReference Include="Dapper.Contrib" Version="2.0.30" />
-    <PackageReference Include="Grpc.AspNetCore" Version="2.23.2" />
-    <PackageReference Include="Grpc.Net.Client" Version="2.26.0" />
     <PackageReference Include="Microsoft.Data.SQLite" Version="3.1.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.0" />
-    <PackageReference Include="Quartz" Version="3.0.7" />
   </ItemGroup>
 
   <ItemGroup>
-    <Protobuf Include="..\Protos\*.proto" GrpcServices="Client" Link="Protos\%(RecursiveDir)%(Filename)%(Extension)" />
+    <ProjectReference Include="..\gTimedTask\gTimedTask.csproj" />
   </ItemGroup>
-
 </Project>
