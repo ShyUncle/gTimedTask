@@ -21,4 +21,7 @@
   <ItemGroup>
     <ProjectReference Include="..\gTimedTask\gTimedTask.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <!--<EmbeddedResource Include="node_modules/swagger-ui-dist/**/*" Exclude="**/*/*.map;**/*/*.json;**/*/*.md" />-->
+  </ItemGroup>
 </Project>

@@ -10,6 +10,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using gTimedTask.Core;
 using gTimedTask.Core.RegistrationCenter;
+using System.IO;
+using System.Text;
+using Microsoft.Extensions.FileProviders;
+using Microsoft.AspNetCore.Routing.Template;
+using Microsoft.AspNetCore.Routing;
 
 namespace gTimedTask.Core
 {
@@ -38,15 +43,80 @@ namespace gTimedTask.Core
             }
 
             DynamicJobScheduler.Start();
-
+            var staticFileOptions = new StaticFileOptions
+            {
+                RequestPath = $"/h2tml",
+                FileProvider = new EmbeddedFileProvider(System.Reflection.Assembly.Load("gTimedTask"), "gTimedTask.html"),
+            };
+            app.UseStaticFiles(staticFileOptions);
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseAuthorization();
             app.UseAuthentication();
+            app.Use(async (context, next) =>
+           {
+               var tm = new TemplateMatcher(TemplateParser.Parse("gTimedTaskapi/default"), new RouteValueDictionary());
+               if (tm.TryMatch(context.Request.Path, context.Request.RouteValues))
+               {
+                   string method = "";
+                   if (context.Request.Method == HttpMethods.Post)
+                   {
+                       var req = context.Request;
+                       req.EnableBuffering();
+
+
+                       using (var reader = new StreamReader(req.Body, Encoding.UTF8, true, 1024, true))
+                       {
+                           var a = await reader.ReadToEndAsync();
+                           var job = System.Text.Json.JsonSerializer.Deserialize<JobExecutor>(a);
+                           JobExecutorManager.Register(job);
+                       }
+
+                       // 这里读取过body  Position是读取过几次  而此操作优于控制器先行 控制器只会读取Position为零次的
+
+                       req.Body.Position = 0;
+                       Console.WriteLine("post请求" + System.Text.Json.JsonSerializer.Serialize(context.Request.RouteValues));
+                   }
+                   else
+                   {
+                       if (context.Request.Method == HttpMethods.Get)
+                       {
+                           Console.WriteLine("get请求" + System.Text.Json.JsonSerializer.Serialize(context.Request.RouteValues));
+                       }
+                   }
+                   await next();
+                   return;
+               }
+               if (context.Request.Path.ToString().Contains("h1tml"))
+               {
+                   await RespondWithIndexHtml(context.Response);
+                   return;
+               }
+               await next();
+               return;
+           });
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
+        }
+        private async Task RespondWithIndexHtml(HttpResponse response)
+        {
+            response.StatusCode = 200;
+            response.ContentType = "text/html;charset=utf-8";
+            var s = System.Reflection.Assembly.Load("gTimedTask")   // typeof(gTimedTask).GetTypeInfo().Assembly
+            .GetManifestResourceStream("gTimedTask.html.index.html");
+            using (var stream = s)
+            {
+                // Inject arguments before writing to response
+                var htmlBuilder = new StringBuilder(new StreamReader(stream).ReadToEnd());
+                //foreach (var entry in GetIndexArguments())
+                //{
+                //    htmlBuilder.Replace(entry.Key, entry.Value);
+                //}
+
+                await response.WriteAsync(htmlBuilder.ToString(), Encoding.UTF8);
+            }
         }
     }
 }
