@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace gTimedTask.Core.RegistrationCenter
+namespace gTimedTask.RegistrationCenter
 {
     /// <summary>
     /// 执行器

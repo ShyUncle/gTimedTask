@@ -1,5 +1,5 @@
 ﻿using Grpc.Net.Client;
-using gTimedTask.Core.RegistrationCenter;
+using gTimedTask.RegistrationCenter;
 using Quartz;
 using Quartz.Impl;
 using Quartz.Impl.Triggers;
@@ -11,7 +11,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace gTimedTask.Core
+namespace gTimedTask
 {
     /// <summary>
     /// 定时任务中心

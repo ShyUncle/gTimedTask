@@ -8,7 +8,7 @@ using Dapper;
 using System.Data;
 using Microsoft.Data.Sqlite;
 using Dapper.Contrib.Extensions;
-using gTimedTask.Core.RegistrationCenter;
+using gTimedTask.RegistrationCenter;
 
 namespace gTimedTask.Core.Controllers
 {

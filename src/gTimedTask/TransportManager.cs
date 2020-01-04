@@ -6,9 +6,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Grpc.Health.V1;
 using System.Threading;
-using gTimedTask.Core.RegistrationCenter;
+using gTimedTask.RegistrationCenter;
 
-namespace gTimedTask.Core
+namespace gTimedTask
 {
     /// <summary>
     /// 底层通信管理
@@ -17,7 +17,7 @@ namespace gTimedTask.Core
     {
         public async Task<ExecutorStatus> HealthCheck(string address)
         {
-            var channel = GrpcChannel.ForAddress("https://localhost:10101");
+            var channel = GrpcChannel.ForAddress(address);
             var client = new Health.HealthClient(channel);
             var call = await client.CheckAsync(new HealthCheckRequest { Service = "" });
             return Enum.Parse<ExecutorStatus>(call.Status.ToString());

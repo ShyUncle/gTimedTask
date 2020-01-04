@@ -28,41 +28,38 @@ namespace gTimedTask.Executor
 
     public class ExecutorManager
     {
-        public ExecutorManager(IConfiguration configuration, IHostApplicationLifetime hostApplicationLifetime)
+        public ExecutorManager(JobExecutorOption option)
         {
-            Configuration = configuration;
-            hostApplicationLifetime.ApplicationStopping.Register(() =>
-            {
-                ExecutorUnRegister();
-            });
+            jobExecutorOption = option;
         }
-        private IConfiguration Configuration { get; }
+        private JobExecutorOption jobExecutorOption;
         private JobExecutor jobExecutor;
         public Dictionary<string, Type> jobHandlerRepository = new Dictionary<string, Type>();
-        public void ExecutorRegister(JobExecutorOption option)
+        public void ExecutorRegister()
         {
+            //todo:使用依赖注入查找
             var types = AppDomain.CurrentDomain.GetAssemblies().SelectMany(a => a.GetTypes().Where(t => t.GetInterfaces().Contains(typeof(IJobHandler)))).ToList();
             foreach (var type in types)
             {
                 jobHandlerRepository.Add(type.FullName, type);
             }
-            if (option == null)
+            if (jobExecutorOption == null)
             {
-                option = Configuration.GetSection("JobExecutor").Get<JobExecutorOption>();
+                throw new ArgumentNullException("JobExecutorOption");
             }
             //todo:参数检查
             jobExecutor = new JobExecutor()
             {
-                Address = option.Address,
-                AppId = option.AppId,
-                Name = option.Name,
+                Address = jobExecutorOption.Address,
+                AppId = jobExecutorOption.AppId,
+                Name = jobExecutorOption.Name,
                 JobHandler = jobHandlerRepository.Keys.ToList(),
-                RegisterUrl = option.RegisterUrl
+                RegisterUrl = jobExecutorOption.RegisterUrl
             };
 
             var content = new StringContent(JsonSerializer.Serialize(jobExecutor), System.Text.Encoding.UTF8, "application/json");
             //todo:使用httpclientFactory
-            var r = new HttpClient().PostAsync(option.RegisterUrl, content).Result.Content.ReadAsStringAsync().Result;
+            var r = new HttpClient().PostAsync(jobExecutorOption.RegisterUrl, content).Result.Content.ReadAsStringAsync().Result;
         }
 
         public void ExecutorUnRegister()

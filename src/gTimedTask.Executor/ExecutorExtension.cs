@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,24 +11,39 @@ namespace gTimedTask.Executor
 {
     public static class ExecutorExtension
     {
-        public static IServiceCollection AddExecutor(this IServiceCollection services)
+        public static IServiceCollection AddgTimedTaskExecutor(this IServiceCollection services, Action<JobExecutorOption> optionConfig)
         {
-            services.AddSingleton<ExecutorManager>();
+            services.AddGrpc();
+            services.AddSingleton((s) =>
+            {
+                var configuration = s.GetService<IConfiguration>();
+                var optionConfig = configuration.GetSection("JobExecutor").Get<JobExecutorOption>();
+                var executor = new ExecutorManager(optionConfig);
+                return executor;
+            });
+
             return services;
         }
-        public static IApplicationBuilder UseExecutor(this IApplicationBuilder app)
+        public static IApplicationBuilder UsegTimedTaskExecutor(this IApplicationBuilder app)
         {
-            var executorManager = app.ApplicationServices.GetService<ExecutorManager>();
-            executorManager.ExecutorRegister(null);
-            return app;
-        }
+            if (app == null)
+            {
+                throw new ArgumentNullException("builder");
+            }
+            
 
-        public static IApplicationBuilder UseExecutor(this IApplicationBuilder app, Action<JobExecutorOption> optionConfig)
-        {
             var executorManager = app.ApplicationServices.GetService<ExecutorManager>();
-            var jobOption = new JobExecutorOption();
-            optionConfig.Invoke(jobOption);
-            executorManager.ExecutorRegister(jobOption);
+            executorManager.ExecutorRegister();
+            var hostApplicationLifetime = app.ApplicationServices.GetService<IHostApplicationLifetime>();
+            hostApplicationLifetime.ApplicationStopping.Register(() =>
+            {
+                executorManager.ExecutorUnRegister();
+            });
+            app.UseEndpoints(e =>
+            {
+                e.MapGrpcService<GreeterService>();
+                e.MapGrpcService<Services.HealthCheckService>();
+            });
             return app;
         }
     }

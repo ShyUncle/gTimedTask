@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option csharp_namespace = "gTimedTask.Core";
+option csharp_namespace = "gTimedTask";
 
 package Greet;
 
