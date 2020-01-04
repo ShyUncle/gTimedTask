@@ -3,13 +3,25 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "gTimedTask.Core", "gTimedTask.Core\gTimedTask.Core.csproj", "{3C4E8F90-15FE-45BC-BDD6-FBCAD7724B91}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "gTimedTask.SampleExecutor", "gTimedTask.SampleExecutor\gTimedTask.SampleExecutor.csproj", "{5E2DBA45-4B9B-43F1-A502-B3D72FEB0980}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "gTimedTask", "gTimedTask\gTimedTask.csproj", "{76B2376C-542E-4C98-846E-AD10CB981E4E}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "gTimedTask.Executor", "gTimedTask.Executor\gTimedTask.Executor.csproj", "{60F01011-F186-46A1-808A-7447EA22F297}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "gTimedTask.SQLite", "gTimedTask.SQLite\gTimedTask.SQLite.csproj", "{4B2DCFDA-8F15-4879-9D11-B02199897D15}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "gTimedTask.SqlServer", "gTimedTask.SqlServer\gTimedTask.SqlServer.csproj", "{7BE8AC44-6F60-487B-AD56-6FC78B0CBE8D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "gTimedTask.SampleServer", "gTimedTask.SampleServer\gTimedTask.SampleServer.csproj", "{1974BD4A-57ED-49D4-B343-C0B49C6096F6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "gTimedTask.Core", "gTimedTask.Core\gTimedTask.Core.csproj", "{CFCC5148-E7E6-4944-A482-2A3C28496CE4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "gTimedTask", "gTimedTask\gTimedTask.csproj", "{C38F982E-360E-418D-9617-04EAB4A5FCF9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{D842CC81-6672-48D4-9CA6-D74A06350DD6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "定时中心", "定时中心", "{EBCFAEAB-D634-4639-9664-A861787A2C9C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "执行器", "执行器", "{6A2B34F5-1D0B-4D06-A5F1-361F5D3D7743}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,25 +29,46 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{3C4E8F90-15FE-45BC-BDD6-FBCAD7724B91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3C4E8F90-15FE-45BC-BDD6-FBCAD7724B91}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3C4E8F90-15FE-45BC-BDD6-FBCAD7724B91}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3C4E8F90-15FE-45BC-BDD6-FBCAD7724B91}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5E2DBA45-4B9B-43F1-A502-B3D72FEB0980}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5E2DBA45-4B9B-43F1-A502-B3D72FEB0980}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5E2DBA45-4B9B-43F1-A502-B3D72FEB0980}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5E2DBA45-4B9B-43F1-A502-B3D72FEB0980}.Release|Any CPU.Build.0 = Release|Any CPU
-		{76B2376C-542E-4C98-846E-AD10CB981E4E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{76B2376C-542E-4C98-846E-AD10CB981E4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{76B2376C-542E-4C98-846E-AD10CB981E4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{76B2376C-542E-4C98-846E-AD10CB981E4E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{60F01011-F186-46A1-808A-7447EA22F297}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{60F01011-F186-46A1-808A-7447EA22F297}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{60F01011-F186-46A1-808A-7447EA22F297}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{60F01011-F186-46A1-808A-7447EA22F297}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4B2DCFDA-8F15-4879-9D11-B02199897D15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B2DCFDA-8F15-4879-9D11-B02199897D15}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B2DCFDA-8F15-4879-9D11-B02199897D15}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B2DCFDA-8F15-4879-9D11-B02199897D15}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7BE8AC44-6F60-487B-AD56-6FC78B0CBE8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7BE8AC44-6F60-487B-AD56-6FC78B0CBE8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7BE8AC44-6F60-487B-AD56-6FC78B0CBE8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7BE8AC44-6F60-487B-AD56-6FC78B0CBE8D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1974BD4A-57ED-49D4-B343-C0B49C6096F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1974BD4A-57ED-49D4-B343-C0B49C6096F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1974BD4A-57ED-49D4-B343-C0B49C6096F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1974BD4A-57ED-49D4-B343-C0B49C6096F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CFCC5148-E7E6-4944-A482-2A3C28496CE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFCC5148-E7E6-4944-A482-2A3C28496CE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFCC5148-E7E6-4944-A482-2A3C28496CE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFCC5148-E7E6-4944-A482-2A3C28496CE4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C38F982E-360E-418D-9617-04EAB4A5FCF9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C38F982E-360E-418D-9617-04EAB4A5FCF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C38F982E-360E-418D-9617-04EAB4A5FCF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C38F982E-360E-418D-9617-04EAB4A5FCF9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5E2DBA45-4B9B-43F1-A502-B3D72FEB0980} = {D842CC81-6672-48D4-9CA6-D74A06350DD6}
+		{60F01011-F186-46A1-808A-7447EA22F297} = {6A2B34F5-1D0B-4D06-A5F1-361F5D3D7743}
+		{4B2DCFDA-8F15-4879-9D11-B02199897D15} = {EBCFAEAB-D634-4639-9664-A861787A2C9C}
+		{7BE8AC44-6F60-487B-AD56-6FC78B0CBE8D} = {EBCFAEAB-D634-4639-9664-A861787A2C9C}
+		{1974BD4A-57ED-49D4-B343-C0B49C6096F6} = {D842CC81-6672-48D4-9CA6-D74A06350DD6}
+		{CFCC5148-E7E6-4944-A482-2A3C28496CE4} = {EBCFAEAB-D634-4639-9664-A861787A2C9C}
+		{C38F982E-360E-418D-9617-04EAB4A5FCF9} = {EBCFAEAB-D634-4639-9664-A861787A2C9C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2CDD2A78-C92E-404B-853E-DC202699D570}
