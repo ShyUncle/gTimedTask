@@ -59,7 +59,7 @@ namespace gTimedTask
             var staticFileOptions = new StaticFileOptions
             {
                 RequestPath = $"/h1tml",
-                FileProvider = new EmbeddedFileProvider(System.Reflection.Assembly.Load("gTimedTask"), "gTimedTask.html"),
+                FileProvider = new EmbeddedFileProvider(typeof(UIMiddleware).Assembly, "gTimedTask.html"),
             };
 
             _staticFileMiddleware = new StaticFileMiddleware(next, hostingEnv, Options.Create(staticFileOptions), loggerFactory);
@@ -91,7 +91,7 @@ namespace gTimedTask
         {
             response.StatusCode = 200;
             response.ContentType = "text/html;charset=utf-8";
-            var s = System.Reflection.Assembly.Load("gTimedTask")   // typeof(gTimedTask).GetTypeInfo().Assembly
+            var s = typeof(UIMiddleware).Assembly
             .GetManifestResourceStream("gTimedTask.html.index1.html");
             using (var stream = s)
             {
