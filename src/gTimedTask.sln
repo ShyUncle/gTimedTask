@@ -7,19 +7,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "gTimedTask.SampleExecutor",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "gTimedTask.Executor", "gTimedTask.Executor\gTimedTask.Executor.csproj", "{60F01011-F186-46A1-808A-7447EA22F297}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "gTimedTask.SQLite", "gTimedTask.SQLite\gTimedTask.SQLite.csproj", "{4B2DCFDA-8F15-4879-9D11-B02199897D15}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "gTimedTask.SQLite", "gTimedTask.SQLite\gTimedTask.SQLite.csproj", "{4B2DCFDA-8F15-4879-9D11-B02199897D15}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "gTimedTask.SqlServer", "gTimedTask.SqlServer\gTimedTask.SqlServer.csproj", "{7BE8AC44-6F60-487B-AD56-6FC78B0CBE8D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "gTimedTask.SqlServer", "gTimedTask.SqlServer\gTimedTask.SqlServer.csproj", "{7BE8AC44-6F60-487B-AD56-6FC78B0CBE8D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "gTimedTask.SampleServer", "gTimedTask.SampleServer\gTimedTask.SampleServer.csproj", "{1974BD4A-57ED-49D4-B343-C0B49C6096F6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "gTimedTask.Core", "gTimedTask.Core\gTimedTask.Core.csproj", "{CFCC5148-E7E6-4944-A482-2A3C28496CE4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "gTimedTask", "gTimedTask\gTimedTask.csproj", "{C38F982E-360E-418D-9617-04EAB4A5FCF9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "gTimedTask", "gTimedTask\gTimedTask.csproj", "{C38F982E-360E-418D-9617-04EAB4A5FCF9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{D842CC81-6672-48D4-9CA6-D74A06350DD6}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "定时中心", "定时中心", "{EBCFAEAB-D634-4639-9664-A861787A2C9C}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "服务端", "服务端", "{EBCFAEAB-D634-4639-9664-A861787A2C9C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "执行器", "执行器", "{6A2B34F5-1D0B-4D06-A5F1-361F5D3D7743}"
 EndProject

@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-
+using gTimedTask.Executor;
 namespace gTimedTask.Executor
 {
     public class Startup
@@ -21,7 +21,7 @@ namespace gTimedTask.Executor
             //    c.BaseAddress = new Uri("https://localhost:5003");
             //});
             //todo:添加参数配置
-            services.AddExecutor((config) => { });
+            services.AddgTimedTaskExecutor((config) => { });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

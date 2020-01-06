@@ -51,6 +51,7 @@ namespace gTimedTask
     }
     public class UIMiddleware
     {
+        public string RoutePrefix { get; set; } = "gTimedTask";
         private StaticFileMiddleware _staticFileMiddleware;
         private readonly RequestDelegate _nextDelegate;
         public UIMiddleware(RequestDelegate next, IWebHostEnvironment hostingEnv, ILoggerFactory loggerFactory)
@@ -58,17 +59,17 @@ namespace gTimedTask
             _nextDelegate = next;
             var staticFileOptions = new StaticFileOptions
             {
-                RequestPath = $"/h1tml",
-                FileProvider = new EmbeddedFileProvider(typeof(UIMiddleware).Assembly, "gTimedTask.html"),
+                RequestPath = $"/{RoutePrefix}",
+                FileProvider = new EmbeddedFileProvider(typeof(UIMiddleware).Assembly, "gTimedTask.Core.html"),
             };
 
             _staticFileMiddleware = new StaticFileMiddleware(next, hostingEnv, Options.Create(staticFileOptions), loggerFactory);
         }
         public async Task InvokeAsync(HttpContext context)
         {
-            if (context.Request.Path.ToString().Contains("h1tml"))
+            if (context.Request.Path.ToString().Contains(RoutePrefix))
             {
-                if (Regex.IsMatch(context.Request.Path.Value, $"^/h1tml/?$"))
+                if (Regex.IsMatch(context.Request.Path.Value, $"^/{RoutePrefix}/?$"))
                 {
                     // Use relative redirect to support proxy environments
                     var relativeRedirectPath = context.Request.Path.Value.EndsWith("/")
@@ -78,7 +79,7 @@ namespace gTimedTask
                     context.Response.Headers["Location"] = relativeRedirectPath;
                     return;
                 }
-                if (Regex.IsMatch(context.Request.Path.Value, $"/h1tml/?index.html"))
+                if (Regex.IsMatch(context.Request.Path.Value, $"/{RoutePrefix}/?index.html"))
                 {
                     await RespondWithIndexHtml(context.Response);
                     return;
@@ -92,7 +93,7 @@ namespace gTimedTask
             response.StatusCode = 200;
             response.ContentType = "text/html;charset=utf-8";
             var s = typeof(UIMiddleware).Assembly
-            .GetManifestResourceStream("gTimedTask.html.index1.html");
+            .GetManifestResourceStream("gTimedTask.Core.html.index.html");
             using (var stream = s)
             {
                 // Inject arguments before writing to response

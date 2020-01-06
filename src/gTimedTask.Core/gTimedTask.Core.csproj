@@ -7,11 +7,8 @@
     <Protobuf Include="..\Protos\*.proto" GrpcServices="Client" Link="Protos\%(RecursiveDir)%(Filename)%(Extension)" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="html/*.*" Exclude="**/*/*.map;**/*/*.json;**/*/*.md" />
+    <EmbeddedResource Include="html/*.*;html/static/css/*;html/static/fonts/*;html/static/img/*;html/static/js/*" Exclude="**/*/*.map;**/*/*.json;**/*/*.md" />
     <!--<EmbeddedResource Include="html\index.html" />-->
-  </ItemGroup>
-  <ItemGroup>
-    <None Remove="html\style1.css" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Dapper.Contrib" Version="2.0.30" />
