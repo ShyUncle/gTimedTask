@@ -37,7 +37,7 @@ namespace gTimedTask
             //存储类型
             properties["quartz.jobStore.type"] = "Quartz.Impl.AdoJobStore.JobStoreTX, Quartz";
             //表明前缀
-            properties["quartz.jobStore.tablePrefix"] = "QRTZ_";
+            properties["quartz.jobStore.tablePrefix"] = "GTIMEDTASK_";
             //驱动类型
             properties["quartz.jobStore.driverDelegateType"] = "Quartz.Impl.AdoJobStore.StdAdoDelegate, Quartz";
             //数据源名称
@@ -170,7 +170,12 @@ namespace gTimedTask
 
                 await scheduler.ScheduleJob(jobDetail, cronTrigger);
             }
-
+            //await new gTimedTask.Core.Storage.DbRepository(null).InsertAsync<gTimedTask.Core.DomainModel.JobEntity>(new Core.DomainModel.JobEntity()
+            //{
+            //    CreateTime = DateTime.Now.Ticks,
+            //    Cron = cronExpression,
+            //     Description=""
+            //}); ;
             //logger.info(">>>>>>>>>>> resumeJob success, JobGroup:{}, JobName:{}", jobGroup, jobName);
             return true;
         }
