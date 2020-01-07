@@ -16,6 +16,7 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.AspNetCore.Routing.Template;
 using Microsoft.AspNetCore.Routing;
 using System.Text.RegularExpressions;
+using gTimedTask.SQLite;
 
 namespace gTimedTask.Core
 {
@@ -32,6 +33,8 @@ namespace gTimedTask.Core
         {
             services.AddControllers();
             services.AddgTimedTask();
+            string path = AppDomain.CurrentDomain.BaseDirectory + "Db/gTimedTask.db";
+            services.AddSQLiteJobStorage($"Data Source={path}");
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
