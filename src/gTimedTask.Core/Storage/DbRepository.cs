@@ -73,8 +73,15 @@ namespace gTimedTask.Core.Storage
         {
             using (var con = GetConnection())
             {
-                var result = await con.InsertAsync(entity);
-                return result;
+                try
+                {
+                    var result = await con.InsertAsync(entity);
+                    return result;
+                }
+                catch (Exception ex)
+                {
+                    return 0;
+                }
             }
         }
 

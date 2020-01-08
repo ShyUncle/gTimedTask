@@ -20,20 +20,31 @@ namespace gTimedTask.Core
         //{
         //    this._httpClientFactory = clientFactory;
         //}
+
+        public static Dictionary<string, Greeter.GreeterClient> dicClient = new Dictionary<string, Greeter.GreeterClient>();
         public async Task Execute(IJobExecutionContext context)
         {
             var s = context.JobDetail;
 
             var url = s.JobDataMap.Get("url");
-            var executor = JobExecutorManager.GetExecutor(s.Key.Name, LoadBalanceStrategy.First);
+            var executor = JobExecutorManager.GetExecutor("gTimedTask.Executor.Handler.LogHandler", LoadBalanceStrategy.First);//s.Key.Name, LoadBalanceStrategy.First);
             if (executor == null)
             {
                 return;
             }
             var address = executor.Address;
-            var channel = GrpcChannel.ForAddress(address);
+            Greeter.GreeterClient greeterClient = null;
+            if (dicClient.ContainsKey(address))
+            {
+                greeterClient = dicClient[address];
+            }
+            else
+            {
+                GrpcChannel channel = GrpcChannel.ForAddress(address);
+                greeterClient = new Greeter.GreeterClient(channel); 
+                dicClient[address] = greeterClient;
+            }
 
-            var greeterClient = new Greeter.GreeterClient(channel);
             await greeterClient.GetHelloAsync(new HelloRequest { Name = s.Key.Name });
             context.Result = "a";
             JobKey jobKey = context.Trigger.JobKey;

@@ -21,6 +21,6 @@ namespace gTimedTask
             var client = new Health.HealthClient(channel);
             var call = await client.CheckAsync(new HealthCheckRequest { Service = "" });
             return Enum.Parse<ExecutorStatus>(call.Status.ToString());
-        }
+        } 
     }
 }

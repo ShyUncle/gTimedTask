@@ -8,10 +8,10 @@ namespace gTimedTask.Core.Api
 {
     public interface IJobService
     {
-        [gTimedTaskRoute("/job/add", "post")]
+        [gTimedTaskRoute("job/add", "post")]
         Task<bool> Add(DomainModel.JobEntity jobEntity);
 
-        [gTimedTaskRoute("/job/update")]
+        [gTimedTaskRoute("job/update")]
         Task<bool> Update(DomainModel.JobEntity jobEntity);
     }
 }

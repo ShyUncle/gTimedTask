@@ -9,5 +9,11 @@ namespace gTimedTask.SQLite
             services.AddSingleton<IJobStorageConnection, SQLiteJobStorage>((provider) => new SQLiteJobStorage(connectionString));
             return services;
         }
+
+        public static gTimedTaskOptions AddSQLiteJobStorage(this gTimedTaskOptions options, string connectionString)
+        {
+            options.jobStorageConnection = new SQLiteJobStorage(connectionString);
+            return options;
+        }
     }
 }

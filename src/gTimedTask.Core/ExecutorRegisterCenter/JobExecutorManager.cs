@@ -13,11 +13,6 @@ namespace gTimedTask.RegistrationCenter
     public class JobExecutorManager
     {
         private static ConcurrentDictionary<string, JobExecutor> _list = new ConcurrentDictionary<string, JobExecutor>();
-        static JobExecutorManager()
-        {
-            HealthCheck();
-        }
-
 
         public static void HealthCheck()
         {
@@ -35,7 +30,7 @@ namespace gTimedTask.RegistrationCenter
                             _list.TryRemove(item.AppId, out tmp);
                         }
                     }
-                    await Task.Delay(1000);
+                    await Task.Delay(10000);
                 }
             });
         }

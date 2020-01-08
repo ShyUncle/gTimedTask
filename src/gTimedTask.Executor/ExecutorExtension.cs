@@ -29,15 +29,17 @@ namespace gTimedTask.Executor
             if (app == null)
             {
                 throw new ArgumentNullException("builder");
-            } 
+            }
             var executorManager = app.ApplicationServices.GetService<ExecutorManager>();
-            executorManager.ExecutorRegister();
             var hostApplicationLifetime = app.ApplicationServices.GetService<IHostApplicationLifetime>();
             hostApplicationLifetime.ApplicationStopping.Register(() =>
             {
                 executorManager.ExecutorUnRegister();
             });
-            hostApplicationLifetime.ApplicationStarted.Register(() => {
+            hostApplicationLifetime.ApplicationStarted.Register(() =>
+            {
+
+                executorManager.ExecutorRegister();
                 Console.WriteLine("服务主机启动成功，可以启动其他任务");
             });
             app.UseEndpoints(e =>

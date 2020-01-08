@@ -18,6 +18,7 @@ namespace gTimedTask.Core.Api
     {
         public ApiDispatcher()
         {
+            string RoutePrefix = "gTimedTask";
             var a = typeof(IJobService).Assembly.GetTypes();
             foreach (var b in a)
             {
@@ -31,7 +32,7 @@ namespace gTimedTask.Core.Api
                         ApiHttpMethod = bd.ApiHttpMethod,
                         ApiTargetType = b,
                         Name = item.Name,
-                        RouteTemplateMatcher = new TemplateMatcher(TemplateParser.Parse(bd.Template), new RouteValueDictionary())
+                        RouteTemplateMatcher = new TemplateMatcher(TemplateParser.Parse(RoutePrefix + "/"+bd.Template), new RouteValueDictionary())
                     });
                 }
             }
