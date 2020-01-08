@@ -15,13 +15,11 @@ namespace gTimedTask.Core
     //[Quartz.DisallowConcurrentExecution]
     public class RemoteCallJob : IJob
     {
-        private IHttpClientFactory _httpClientFactory;
         //public RemoteHttpJob(System.Net.Http.IHttpClientFactory clientFactory)
         //{
         //    this._httpClientFactory = clientFactory;
         //}
 
-        public static Dictionary<string, Greeter.GreeterClient> dicClient = new Dictionary<string, Greeter.GreeterClient>();
         public async Task Execute(IJobExecutionContext context)
         {
             var s = context.JobDetail;
@@ -33,18 +31,9 @@ namespace gTimedTask.Core
                 return;
             }
             var address = executor.Address;
-            Greeter.GreeterClient greeterClient = null;
-            if (dicClient.ContainsKey(address))
-            {
-                greeterClient = dicClient[address];
-            }
-            else
-            {
-                GrpcChannel channel = GrpcChannel.ForAddress(address);
-                greeterClient = new Greeter.GreeterClient(channel); 
-                dicClient[address] = greeterClient;
-            }
-
+            //todo:抽象通讯模型
+            GrpcChannel channel = TransportManager.GetOrAddChannel(address);
+            var greeterClient = new Greeter.GreeterClient(channel);
             await greeterClient.GetHelloAsync(new HelloRequest { Name = s.Key.Name });
             context.Result = "a";
             JobKey jobKey = context.Trigger.JobKey;

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Grpc.Net.Client;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,6 +35,7 @@ namespace gTimedTask.RegistrationCenter
                 }
             });
         }
+
         /// <summary>
         /// 注册
         /// </summary>

@@ -15,12 +15,28 @@ namespace gTimedTask
     /// </summary>
     public class TransportManager
     {
+        private static Dictionary<string, GrpcChannel> dicChannel = new Dictionary<string, GrpcChannel>();
         public async Task<ExecutorStatus> HealthCheck(string address)
         {
-            var channel = GrpcChannel.ForAddress(address);
+            var channel = GetOrAddChannel(address);
             var client = new Health.HealthClient(channel);
             var call = await client.CheckAsync(new HealthCheckRequest { Service = "" });
             return Enum.Parse<ExecutorStatus>(call.Status.ToString());
-        } 
+        }
+
+        public static GrpcChannel GetOrAddChannel(string address)
+        {
+            GrpcChannel channel = null;
+            if (dicChannel.ContainsKey(address))
+            {
+                channel = dicChannel[address];
+            }
+            else
+            {
+                channel = GrpcChannel.ForAddress(address);
+                dicChannel[address] = channel;
+            }
+            return channel;
+        }
     }
 }
