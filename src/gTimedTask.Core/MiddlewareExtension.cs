@@ -33,7 +33,7 @@ namespace gTimedTask
             hostApplicationLifetime.ApplicationStarted.Register(() =>
             {
                 DynamicJobScheduler.Start();
-                //JobExecutorManager.HealthCheck();
+                JobExecutorManager.HealthCheck();
                 Console.WriteLine("服务主机启动成功，可以启动其他任务");
             });
             app.UseMiddleware<ApiMiddleware>();

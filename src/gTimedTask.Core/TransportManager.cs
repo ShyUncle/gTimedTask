@@ -10,11 +10,55 @@ using gTimedTask.RegistrationCenter;
 
 namespace gTimedTask
 {
+    public interface ITransporter
+    {
+        /// <summary>
+        /// 健康检查
+        /// </summary>
+        /// <param name="address"></param>
+        /// <returns></returns>
+        Task HealthCheck(string address);
+        /// <summary>
+        /// 执行器任务调用
+        /// </summary>
+        /// <returns></returns>
+        Task CallJobHandler(JobExecutor jobExecutor);
+
+        /// <summary>
+        /// 获取任务列表
+        /// </summary>
+        /// <param name="address"></param>
+        /// <returns></returns>
+        Task<List<string>> GetJobHandler(string address);
+    }
+
+    /// <summary>
+    /// 底层通讯框架
+    /// </summary>
+    public class GrpcTransporter : ITransporter
+    {  
+        public Task CallJobHandler(JobExecutor jobExecutor)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<string>> GetJobHandler(string address)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task HealthCheck(string address)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
     /// <summary>
     /// 底层通信管理
     /// </summary>
     public class TransportManager
     {
+        //todo:抽象
         private static Dictionary<string, GrpcChannel> dicChannel = new Dictionary<string, GrpcChannel>();
         public async Task<ExecutorStatus> HealthCheck(string address)
         {
@@ -31,7 +75,7 @@ namespace gTimedTask
             {
                 channel = dicChannel[address];
             }
-            else
+            else 
             {
                 channel = GrpcChannel.ForAddress(address);
                 dicChannel[address] = channel;
