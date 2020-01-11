@@ -19,7 +19,7 @@ namespace gTimedTask.Core.Api
         public async Task<bool> Add(DomainModel.JobEntity jobEntity)
         {
             var result = await DynamicJobScheduler.AddJob(jobEntity.ExecutorHandler, jobEntity.ExecutorGroup, jobEntity.Cron);
-
+           
             if (result)
             {
                 result = await _dbRepository.InsertAsync(jobEntity) > 0;

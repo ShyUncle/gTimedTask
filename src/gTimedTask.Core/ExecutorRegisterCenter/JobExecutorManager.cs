@@ -22,16 +22,19 @@ namespace gTimedTask.RegistrationCenter
                 while (true)
                 {
                     var list = _list.Values.ToList();
-                    foreach (var item in list)
+                    var resul = Parallel.ForEach(list, new ParallelOptions { MaxDegreeOfParallelism = 5 }, async (item) =>
+                      {
+                          var status = await new TransportManager().HealthCheck(item.Address);
+                          item.Status = status;
+                      });
+
+                    await Task.Delay(1000);
+                    while (!resul.IsCompleted)
                     {
-                        var status = await new TransportManager().HealthCheck(item.Address);
-                        if (status == ExecutorStatus.NotServing)
-                        {
-                            JobExecutor tmp = null;
-                            _list.TryRemove(item.AppId, out tmp);
-                        }
+                        await Task.Delay(1000);
                     }
-                    await Task.Delay(10000);
+
+                    await Task.Delay(1000);
                 }
             });
         }
@@ -123,8 +126,13 @@ namespace gTimedTask.RegistrationCenter
     {
         public string Name { get; set; }
         public string AppId { get; set; }
+        /// <summary>
+        /// 分组
+        /// </summary>
+        public string Group { get; set; }
         public string Address { get; set; }
         public List<string> JobHandler { get; set; } = new List<string>();
+        public ExecutorStatus Status { get; set; } = ExecutorStatus.Unknown;
     }
 
 }

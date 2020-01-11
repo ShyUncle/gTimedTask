@@ -14,7 +14,7 @@ namespace gTimedTask.Core.TaskDispatchCenter
         public Task TriggerComplete(ITrigger trigger, IJobExecutionContext context, SchedulerInstruction triggerInstructionCode, CancellationToken cancellationToken = default)
         {
             Console.WriteLine("执行完成");
-
+           
             return Task.CompletedTask;
             // throw new NotImplementedException();
         }

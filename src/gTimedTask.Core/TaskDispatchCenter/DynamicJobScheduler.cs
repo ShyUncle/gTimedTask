@@ -105,7 +105,7 @@ namespace gTimedTask
             // CronTrigger : TriggerKey + cronExpression	// withMisfireHandlingInstructionDoNothing 忽略掉调度终止过程中忽略的调度
             CronScheduleBuilder cronScheduleBuilder = CronScheduleBuilder.CronSchedule(cronExpression).WithMisfireHandlingInstructionDoNothing();
             var cronTrigger = TriggerBuilder.Create().WithIdentity(triggerKey).WithSchedule(cronScheduleBuilder).Build();
-
+            
             // JobDetail 
             IJobDetail jobDetail = JobBuilder.Create(typeof(RemoteCallJob)).WithIdentity(jobKey).WithDescription("测试").UsingJobData("dd", "1").Build();
             // schedule : jobDetail + cronTrigger
@@ -275,8 +275,7 @@ namespace gTimedTask
         }
 
         public static async Task<object> GetList()
-        {
-            // var list= await scheduler.GetTriggerState();
+        { 
             return null;
         }
 
