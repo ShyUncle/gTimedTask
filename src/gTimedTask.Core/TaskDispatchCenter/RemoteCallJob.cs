@@ -33,8 +33,8 @@ namespace gTimedTask.Core
             var address = executor.Address;
             //todo:抽象通讯模型
             GrpcChannel channel = TransportManager.GetOrAddChannel(address);
-            var greeterClient = new Greeter.GreeterClient(channel);
-            await greeterClient.GetHelloAsync(new HelloRequest { Name = s.Key.Name });
+            var triggerjobClient = new JobHandlerTrigger.JobHandlerTriggerClient(channel);
+            await triggerjobClient.TriggerJobAsync(new  JobHandlerTriggerRequest { Name = s.Key.Name });
             context.Result = "a";
             JobKey jobKey = context.Trigger.JobKey;
             Console.WriteLine(DateTime.Now);

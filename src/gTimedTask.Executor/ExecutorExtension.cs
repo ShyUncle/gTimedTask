@@ -44,7 +44,7 @@ namespace gTimedTask.Executor
             });
             app.UseEndpoints(e =>
             {
-                e.MapGrpcService<GreeterService>();
+                e.MapGrpcService<TriggerJobService>();
                 e.MapGrpcService<Services.HealthCheckService>();
             });
             return app;

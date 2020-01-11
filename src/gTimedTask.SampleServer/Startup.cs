@@ -50,7 +50,7 @@ namespace gTimedTask.Core
             app.UseStaticFiles();
             app.UseHttpsRedirection();
             app.UseRouting();
-
+            app.UseCors();
             app.UsegTimedTask();
             app.UsegTimedTaskUI();
             app.UseAuthorization();

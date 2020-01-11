@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+option csharp_namespace = "gTimedTask";
+
+package RemoteTrigger;
+  
+service JobHandlerTrigger {
+  // Sends a greeting
+  rpc TriggerJob (JobHandlerTriggerRequest) returns (JobReply);
+  rpc GetJobHandler(JobHandlersRequest) returns (JobReplys);
+}
+ 
+message JobHandlerTriggerRequest {
+  string name = 1;
+  string param=2;
+}
+ 
+message JobReply {
+  string message = 1;
+}
+
+message JobHandlersRequest {
+}
+message JobReplys {
+ string a=1;
+ repeated  string  anames=3;
+}

@@ -16,6 +16,8 @@ namespace gTimedTask
             //   services.AddSingleton<ApiMiddleware>();
             services.AddTransient<DbRepository>();
             services.AddTransient<IJobService, JobService>();
+
+            services.AddTransient<IUserService, UserService>();
             services.AddSingleton<ApiDispatcher>().AddSingleton<DbConnectionFactory>();
             //  services.AddSingleton<UIMiddleware>();
             gTimedTaskOptions options = new gTimedTaskOptions();
@@ -28,7 +30,7 @@ namespace gTimedTask
             var hostApplicationLifetime = app.ApplicationServices.GetService<IHostApplicationLifetime>();
             hostApplicationLifetime.ApplicationStopping.Register(() =>
             {
-                 
+
             });
             hostApplicationLifetime.ApplicationStarted.Register(() =>
             {
